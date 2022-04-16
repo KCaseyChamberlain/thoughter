@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-var validateEmail = function(email) {
+var validateEmail = function (email) {
     var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return re.test(email)
 };
@@ -23,12 +23,13 @@ const UserSchema = new Schema(
         // thoughts: [
         //     {
         //         type: Schema.Types.ObjectId,
-        //         ref: 'Thoughts'
+        //         ref: 'Thought'
         //     }
         // ],
         // friends: [
         //     {
         //         type: Schema.Types.ObjectId,
+        //         ref: 'Friend'
         //     }
         // ]
     },
@@ -42,15 +43,10 @@ const UserSchema = new Schema(
     }
 );
 
-
-
 // get total count of friends on retrieval
-// UserSchema.virtual('friendCount').get(function () {
-//     return this.friends.reduce(
-//         (total, friend) => total + friend.friends.length + 1,
-//         0
-//     );
-// });
+UserSchema.virtual('friendCount').get(function () {
+    return this.friends.length;
+});
 
 const User = model('User', UserSchema);
 
