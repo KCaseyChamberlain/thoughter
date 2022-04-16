@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('../models/User');
+const Thought = require('../models/Thought');
+
 
 mongoose
     .connect('mongodb://localhost:27017/thoughter', {
@@ -36,9 +38,30 @@ const seedUsers = [
     }
 ];
 
+const seedThoughts = [
+    {
+        thoughtText: "WOW!"
+    },
+    {
+        thoughtText: "Shoot!"
+    },
+    {
+        thoughtText: "WOOOOOH!"
+    },
+    {
+        thoughtText: "NO WAY!"
+    },
+    {
+        thoughtText: "YES!"
+    },
+]
+
 const seedDB = async () => {
     await User.deleteMany({});
     await User.insertMany(seedUsers)
+
+    await Thought.deleteMany({});
+    await Thought.insertMany(seedThoughts)
 };
 
 seedDB().then(() => {
