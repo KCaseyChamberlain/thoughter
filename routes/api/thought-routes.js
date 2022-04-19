@@ -5,7 +5,8 @@ const {
     addReaction,
     removeReaction,
     getAllThought,
-    getThoughtById
+    getThoughtById,
+    updateThought
 } = require('../../controllers/thought-controller');
 
 // /api/thoughts/<userId>
@@ -15,12 +16,12 @@ router.route('/:userId').post(addThought);
 router
     .route('/')
     .get(getAllThought)
-    // .post(createUser);
 
 // /api/thoughts/:id
 router
     .route('/:id')
     .get(getThoughtById)
+    .put(updateThought)
 
 // /api/comments/<userId>/<thoughtId>
 router
