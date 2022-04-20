@@ -60,7 +60,7 @@ const userController = {
     },
 
     // add friend to user
-    addFriend({ params, body }, res) {
+    addFriend({ params }, res) {
         User.findOneAndUpdate(
             { _id: params.userId },
             { $push: { friends: params.friendId }, },
@@ -68,7 +68,7 @@ const userController = {
         )
             .then(dbUserData => {
                 if (!dbUserData) {
-                    return res.status(404).json({ message: 'No pizza found with this id!' });
+                    return res.status(404).json({ message: 'No user found with this id!' });
                 }
                 return User.findOneAndUpdate(
                     { _id: params.friendId },
@@ -78,7 +78,7 @@ const userController = {
             })
             .then(dbUserData => {
                 if (!dbUserData) {
-                    res.status(404).json({ message: 'No pizza found with this id!' });
+                    res.status(404).json({ message: 'No user found with this id!' });
                     return;
                 }
                 res.json(dbUserData);
@@ -87,11 +87,31 @@ const userController = {
     },
 
     // delete friend
-    // removeFriend({ params }, res) {
-    //     User.findOneAndDelete({ _id: params.id })
-    //         .then(dbUserData => res.json(dbUserData))
-    //         .catch(err => res.json(err));
-    // }
+    removeFriend ({ params }, res) {
+        User.findOneAndUpdate(
+            { _id: params.userId },
+            { $pull: { friends: params.friendId }, },
+            { new: true, runValidators: true }
+        )
+            .then(dbUserData => {
+                if (!dbUserData) {
+                    return res.status(404).json({ message: 'No user found with this id!' });
+                }
+                return User.findOneAndUpdate(
+                    { _id: params.friendId },
+                    { $pull: { friends: params.userId } },
+                    { new: true, runValidators: true }
+                );
+            })
+            .then(dbUserData => {
+                if (!dbUserData) {
+                    res.status(404).json({ message: 'No user found with this id!' });
+                    return;
+                }
+                res.json(dbUserData);
+            })
+            .catch(err => res.json(err));
+    }
 };
 
 module.exports = userController;
