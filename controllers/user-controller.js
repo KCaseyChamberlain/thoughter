@@ -60,21 +60,21 @@ const userController = {
     },
 
     // add friend to user
-    // addFriend({ params, body }, res) {
-    //     User.findOneAndUpdate(
-    //         { _id: params.userId },
-    //         { $push: { friends: body } },
-    //         { new: true, runValidators: true }
-    //     )
-    //         .then(dbUserData => {
-    //             if (!dbUserData) {
-    //                 res.status(404).json({ message: 'No user found with this id!' });
-    //                 return;
-    //             }
-    //             res.json(dbUserData);
-    //         })
-    //         .catch(err => res.json(err));
-    // },
+    addFriend({ params, body }, res) {
+        User.findOneAndUpdate(
+            { _id: params.userId },
+            { $push: { friends: params.userId } },
+            { new: true, runValidators: true }
+        )
+            .then(dbUserData => {
+                if (!dbUserData) {
+                    res.status(404).json({ message: 'No pizza found with this id!' });
+                    return;
+                }
+                res.json(dbUserData);
+            })
+            .catch(err => res.json(err));
+    },
 
     // delete friend
     // removeFriend({ params }, res) {
