@@ -63,9 +63,19 @@ const userController = {
     addFriend({ params, body }, res) {
         User.findOneAndUpdate(
             { _id: params.userId },
-            { $push: { friends: params.userId } },
+            { $push: { friends: params.friendId }, },
             { new: true, runValidators: true }
         )
+            .then(dbUserData => {
+                if (!dbUserData) {
+                    return res.status(404).json({ message: 'No pizza found with this id!' });
+                }
+                return User.findOneAndUpdate(
+                    { _id: params.friendId },
+                    { $push: { friends: params.userId } },
+                    { new: true, runValidators: true }
+                );
+            })
             .then(dbUserData => {
                 if (!dbUserData) {
                     res.status(404).json({ message: 'No pizza found with this id!' });
